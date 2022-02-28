@@ -31,3 +31,6 @@ build/
 
 ### VS Code ###
 .vscode/
+/new-pdf.pdf
+*.html
+*.csv

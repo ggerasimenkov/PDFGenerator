@@ -18,11 +18,6 @@
 	</properties>
 	<repositories>
 		<repository>
-			<id>com.e-iceblue</id>
-			<name>e-iceblue</name>
-			<url>https://repo.e-iceblue.com/nexus/content/groups/public/</url>
-		</repository>
-		<repository>
 			<id>AsposeJavaAPI</id>
 			<name>Aspose Java API</name>
 			<url>https://repository.aspose.com/repo/</url>
@@ -42,7 +37,7 @@
 		<dependency>
 			<groupId>com.itextpdf</groupId>
 			<artifactId>html2pdf</artifactId>
-			<version>2.1.6</version>
+			<version>3.0.5</version>
 		</dependency>
 		<dependency>
 			<groupId>com.aspose</groupId>
@@ -58,11 +53,6 @@
 			<groupId>tech.tablesaw</groupId>
 			<artifactId>tablesaw-core</artifactId>
 			<version>0.9.4</version>
-		</dependency>
-		<dependency>
-			<groupId>e-iceblue</groupId>
-			<artifactId>spire.pdf</artifactId>
-			<version>5.2.3</version>
 		</dependency>
 		<dependency>
 			<groupId>com.fasterxml.jackson.dataformat</groupId>
@@ -92,6 +82,20 @@
 			<artifactId>json</artifactId>
 			<version>20160212</version>
 		</dependency>
+		<!-- https://mvnrepository.com/artifact/org.docx4j/docx4j -->
+		<dependency>
+			<groupId>org.docx4j</groupId>
+			<artifactId>docx4j</artifactId>
+			<version>6.1.2</version>
+		</dependency>
+		<!-- https://mvnrepository.com/artifact/org.docx4j/docx4j-export-fo -->
+		<dependency>
+			<groupId>org.docx4j</groupId>
+			<artifactId>docx4j-export-fo</artifactId>
+			<version>11.3.2</version>
+		</dependency>
+
+
 
 		<dependency>
 			<groupId>com.google.code.gson</groupId>

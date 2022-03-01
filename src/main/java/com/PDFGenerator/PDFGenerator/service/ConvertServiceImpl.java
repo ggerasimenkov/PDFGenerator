@@ -13,14 +13,12 @@ import com.itextpdf.html2pdf.HtmlConverter;
 import com.itextpdf.kernel.geom.PageSize;
 import com.itextpdf.kernel.pdf.PdfDocument;
 import com.itextpdf.kernel.pdf.PdfWriter;
+import com.spire.pdf.FileFormat;
 import org.springframework.stereotype.Service;
 import tech.tablesaw.api.Table;
 import tech.tablesaw.io.html.HtmlTableWriter;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileWriter;
-import java.io.IOException;
+import java.io.*;
 
 @Service
 public class ConvertServiceImpl implements ConvertService {
@@ -49,6 +47,7 @@ public class ConvertServiceImpl implements ConvertService {
         HtmlTableWriter.write(table);
         System.out.println(table.fullCopy());
     }
+
 
 
     private ExcelObject[] convertJsonToExcelObjects(String json)

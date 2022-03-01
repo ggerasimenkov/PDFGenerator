@@ -18,6 +18,11 @@
 	</properties>
 	<repositories>
 		<repository>
+			<id>com.e-iceblue</id>
+			<name>e-iceblue</name>
+			<url>https://repo.e-iceblue.com/nexus/content/groups/public/</url>
+		</repository>
+		<repository>
 			<id>AsposeJavaAPI</id>
 			<name>Aspose Java API</name>
 			<url>https://repository.aspose.com/repo/</url>
@@ -54,15 +59,16 @@
 			<artifactId>tablesaw-core</artifactId>
 			<version>0.9.4</version>
 		</dependency>
-		<!-- Thanks for using https://jar-download.com -->
-
-
+		<dependency>
+			<groupId>e-iceblue</groupId>
+			<artifactId>spire.pdf</artifactId>
+			<version>5.2.3</version>
+		</dependency>
 		<dependency>
 			<groupId>com.fasterxml.jackson.dataformat</groupId>
 			<artifactId>jackson-dataformat-csv</artifactId>
 			<version>2.13.0</version>
 		</dependency>
-
 		<dependency>
 			<groupId>com.github.opendevl</groupId>
 			<artifactId>json2flat</artifactId>

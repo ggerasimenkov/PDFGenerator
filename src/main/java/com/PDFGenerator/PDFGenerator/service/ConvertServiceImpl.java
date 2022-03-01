@@ -13,7 +13,6 @@ import com.itextpdf.html2pdf.HtmlConverter;
 import com.itextpdf.kernel.geom.PageSize;
 import com.itextpdf.kernel.pdf.PdfDocument;
 import com.itextpdf.kernel.pdf.PdfWriter;
-import com.spire.pdf.FileFormat;
 import org.springframework.stereotype.Service;
 import tech.tablesaw.api.Table;
 import tech.tablesaw.io.html.HtmlTableWriter;

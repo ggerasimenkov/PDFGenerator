@@ -13,13 +13,19 @@ import com.itextpdf.html2pdf.HtmlConverter;
 import com.itextpdf.kernel.geom.PageSize;
 import com.itextpdf.kernel.pdf.PdfDocument;
 import com.itextpdf.kernel.pdf.PdfWriter;
+import lombok.extern.java.Log;
+import org.apache.poi.xwpf.usermodel.XWPFDocument;
+import org.apache.poi.xwpf.usermodel.XWPFTable;
+import org.apache.poi.xwpf.usermodel.XWPFTableRow;
 import org.springframework.stereotype.Service;
 import tech.tablesaw.api.Table;
 import tech.tablesaw.io.html.HtmlTableWriter;
 
 import java.io.*;
 
+
 @Service
+@Log
 public class ConvertServiceImpl implements ConvertService {
 
     @Override
@@ -41,10 +47,74 @@ public class ConvertServiceImpl implements ConvertService {
             writer.write("</table>");
         }
         PdfDocument pdfDocument = new PdfDocument(new PdfWriter("new-pdf.pdf"));
-        pdfDocument.setDefaultPageSize(new PageSize(1600,1080));
+        pdfDocument.setDefaultPageSize(new PageSize(1600,800));
         HtmlConverter.convertToPdf(new FileInputStream(htmlSource), pdfDocument);
         HtmlTableWriter.write(table);
         System.out.println(table.fullCopy());
+    }
+
+    @Override
+    public void convertToDocx() {
+
+    }
+    static int CsvStringCounter() throws FileNotFoundException{
+        int counter =1;
+        try{
+            BufferedReader br = new BufferedReader(new FileReader("src/main/resources/orderLines.csv"));
+            while (br.readLine() != null){
+                counter++;
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return counter;
+    }
+    static int NumberOfCsvData(){
+        return 1;
+    }
+
+
+    public void createWordTableFromList() throws IOException {
+        //Blank Document
+        XWPFDocument document = new XWPFDocument();
+
+        //Write the Document in file system
+        FileOutputStream out = new FileOutputStream("create_table.docx");
+
+        //create table
+        XWPFTable table = document.createTable();
+        var numberOfCsvStrings = CsvStringCounter();
+        for (var i = 0; i < numberOfCsvStrings; ++i) {
+            var row = table.createRow();
+            if (i == 0){
+                row.createCell();
+                row.getCell(0).setText("Дата");
+                row.createCell();
+                row.getCell(1).setText("Сотрудник");
+                row.createCell();
+                row.getCell(2).setText("Событие");
+                row.createCell();
+                row.getCell(3).setText("Наставник");
+                row.createCell();
+                row.getCell(4).setText("Получатели");
+                row.createCell();
+                row.getCell(5).setText("Тема");
+
+            }else{
+            for (var j = 0; j < 6; ++j) {
+                if (j ==0){
+                    row.getCell(0).setText("J is: " + 0);
+                }else{
+                row.createCell();
+                row.getCell(j).setText("J is: " + j);
+                }
+            }
+            }
+        }
+        table.removeRow(0);
+        document.write(out);
+        out.close();
+        log.info(numberOfCsvStrings +"\nDOCX successfully written");
     }
 
 

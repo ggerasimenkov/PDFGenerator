@@ -1,6 +1,7 @@
 package com.PDFGenerator.PDFGenerator.utils;
 
 public interface CONST {
+    String COMMA_DELIMITER = ",";
     String PATH_TO_FILE = "src/main/resources/orderLines.csv";
     String FILE_NOT_READ = "Could not read file";
     String TABLE_STYLE = """

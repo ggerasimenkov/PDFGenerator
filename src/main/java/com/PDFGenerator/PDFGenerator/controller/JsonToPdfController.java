@@ -14,14 +14,14 @@ import org.springframework.web.bind.annotation.RestController;
 import java.io.IOException;
 
 @RestController
-@RequestMapping("/convert")
+@RequestMapping("api/v1/convert")
 @AllArgsConstructor
 public class JsonToPdfController {
     private final ConvertService convertService;
     private final StorageService storageService;
 
     @GetMapping("/generateTable")
-    public ResponseEntity convertCSVtoTable(@RequestBody String json) throws IOException {
+    public ResponseEntity<Resource> convertCSVtoTable(@RequestBody String json) throws IOException {
         convertService.convertJson2Csv(json);
         Resource file = storageService.loadAsResource();
         convertService.convertCSVtoTable();

@@ -16,12 +16,15 @@ import com.itextpdf.kernel.pdf.PdfWriter;
 import lombok.extern.java.Log;
 import org.apache.poi.xwpf.usermodel.XWPFDocument;
 import org.apache.poi.xwpf.usermodel.XWPFTable;
-import org.apache.poi.xwpf.usermodel.XWPFTableRow;
 import org.springframework.stereotype.Service;
 import tech.tablesaw.api.Table;
 import tech.tablesaw.io.html.HtmlTableWriter;
 
 import java.io.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Scanner;
+
 
 
 @Service
@@ -57,7 +60,7 @@ public class ConvertServiceImpl implements ConvertService {
     public void convertToDocx() {
 
     }
-    static int CsvStringCounter() throws FileNotFoundException{
+    static int CsvStringCounter() {
         int counter =1;
         try{
             BufferedReader br = new BufferedReader(new FileReader("src/main/resources/orderLines.csv"));
@@ -69,44 +72,97 @@ public class ConvertServiceImpl implements ConvertService {
         }
         return counter;
     }
-    static int NumberOfCsvData(){
-        return 1;
+
+    private List<String> getRecordFromLine(String line) {
+        List<String> values = new ArrayList<>();
+        try (Scanner rowScanner = new Scanner(line)) {
+            rowScanner.useDelimiter(CONST.COMMA_DELIMITER);
+            while (rowScanner.hasNext()) {
+                values.add(rowScanner.next());
+            }
+        }
+        return values;
     }
+
 
 
     public void createWordTableFromList() throws IOException {
         //Blank Document
         XWPFDocument document = new XWPFDocument();
-
         //Write the Document in file system
         FileOutputStream out = new FileOutputStream("create_table.docx");
 
+
+
         //create table
-        XWPFTable table = document.createTable();
+        XWPFTable table = document.createTable(0,0);
         var numberOfCsvStrings = CsvStringCounter();
-        for (var i = 0; i < numberOfCsvStrings; ++i) {
+        for (var i = 0; i < numberOfCsvStrings - 1; ++i) {
+
+            List<List<String>> records = new ArrayList<>();
+            try (BufferedReader br = new BufferedReader(new FileReader("src/main/resources/orderLines.csv"))) {
+                String line;
+                while ((line = br.readLine()) != null) {
+                    String[] values = line.split(CONST.COMMA_DELIMITER);
+                    records.add(List.of(values));
+                }
+            }
+            var something = getRecordFromLine(String.valueOf(records.get(i)));
             var row = table.createRow();
             if (i == 0){
                 row.createCell();
-                row.getCell(0).setText("Дата");
+                row.getCell(0).setText(something.get(0)
+                        .replace('[', ' ')
+                        .replace('"', ' ')
+                        .replace(']' , ' ')
+                        .replace(';', ' ').replaceAll("\\s+",""));
                 row.createCell();
-                row.getCell(1).setText("Сотрудник");
+                row.getCell(1).setText(something.get(1)
+                        .replace('[', ' ')
+                        .replace('"', ' ')
+                        .replace(']' , ' ')
+                        .replace(';', ' ').replaceAll("\\s+",""));
                 row.createCell();
-                row.getCell(2).setText("Событие");
+                row.getCell(2).setText(something.get(2)
+                        .replace('[', ' ')
+                        .replace('"', ' ')
+                        .replace(']' , ' ')
+                        .replace(';', ' ').replaceAll("\\s+",""));
                 row.createCell();
-                row.getCell(3).setText("Наставник");
+                row.getCell(3).setText(something.get(3)
+                        .replace('[', ' ')
+                        .replace('"', ' ')
+                        .replace(']' , ' ')
+                        .replace(';', ' ').replaceAll("\\s+",""));
                 row.createCell();
-                row.getCell(4).setText("Получатели");
+                row.getCell(4).setText(something.get(4)
+                        .replace('[', ' ')
+                        .replace('"', ' ')
+                        .replace(']' , ' ')
+                        .replace(';', ' ').replaceAll("\\s+",""));
                 row.createCell();
-                row.getCell(5).setText("Тема");
+                row.getCell(5).setText(something.get(5)
+                        .replace('[', ' ')
+                        .replace('"', ' ')
+                        .replace(']' , ' ')
+                        .replace(';', ' ')
+                        .replaceAll("\\s+",""));
 
             }else{
             for (var j = 0; j < 6; ++j) {
                 if (j ==0){
-                    row.getCell(0).setText("J is: " + 0);
+                    row.getCell(0).setText(something.get(j)
+                            .replace('[', ' ')
+                            .replace('"', ' ')
+                            .replace(']' , ' ')
+                            .replace(';', '\n'));
                 }else{
                 row.createCell();
-                row.getCell(j).setText("J is: " + j);
+                row.getCell(j).setText(something.get(j)
+                        .replace('[', ' ')
+                        .replace('"', ' ')
+                        .replace(']' , ' ')
+                        .replace(';', '\n'));
                 }
             }
             }
@@ -114,7 +170,7 @@ public class ConvertServiceImpl implements ConvertService {
         table.removeRow(0);
         document.write(out);
         out.close();
-        log.info(numberOfCsvStrings +"\nDOCX successfully written");
+        log.info(numberOfCsvStrings +" of rows DOCX table successfully written");
     }
 
 

@@ -14,13 +14,20 @@ import com.itextpdf.kernel.geom.PageSize;
 import com.itextpdf.kernel.pdf.PdfDocument;
 import com.itextpdf.kernel.pdf.PdfWriter;
 import lombok.extern.java.Log;
-import org.apache.poi.xwpf.usermodel.XWPFDocument;
-import org.apache.poi.xwpf.usermodel.XWPFTable;
+import org.apache.poi.ss.usermodel.Font;
+import org.apache.poi.xwpf.usermodel.*;
+import org.openxmlformats.schemas.wordprocessingml.x2006.main.*;
+import org.openxmlformats.schemas.wordprocessingml.x2006.main.CTHeight;
+import org.openxmlformats.schemas.wordprocessingml.x2006.main.CTString;
+import org.openxmlformats.schemas.wordprocessingml.x2006.main.CTTblPr;
+import org.openxmlformats.schemas.wordprocessingml.x2006.main.CTTrPr;
+import org.openxmlformats.schemas.wordprocessingml.x2006.main.impl.CTPageSzImpl;
 import org.springframework.stereotype.Service;
 import tech.tablesaw.api.Table;
 import tech.tablesaw.io.html.HtmlTableWriter;
 
 import java.io.*;
+import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
@@ -94,8 +101,28 @@ public class ConvertServiceImpl implements ConvertService {
 
 
 
+
         //create table
         XWPFTable table = document.createTable(0,0);
+        CTBody body = document.getDocument().getBody();
+        if(!body.isSetSectPr()){
+            body.addNewSectPr();
+        }
+
+        CTSectPr section = body.getSectPr();
+        if(!section.isSetPgSz()){
+            section.addNewPgSz();
+        }
+
+        CTPageSz pageSize = section.getPgSz();
+        pageSize.setOrient(STPageOrientation.LANDSCAPE);
+//A4 = 595x842 / multiply 20 since BigInteger represents 1/20 Point
+        pageSize.setW(BigInteger.valueOf(16840));
+        pageSize.setH(BigInteger.valueOf(11900));
+        CTTblPr tblPr = table.getCTTbl().getTblPr();
+        CTString styleStr = tblPr.addNewTblStyle();
+        styleStr.setVal("StyledTable");
+
         var numberOfCsvStrings = CsvStringCounter();
         for (var i = 0; i < numberOfCsvStrings - 1; ++i) {
 
@@ -107,63 +134,45 @@ public class ConvertServiceImpl implements ConvertService {
                     records.add(List.of(values));
                 }
             }
-            var something = getRecordFromLine(String.valueOf(records.get(i)));
-            var row = table.createRow();
+            var data = getRecordFromLine(String.valueOf(records.get(i)));
+
+            List<XWPFTableRow> rows = table.getRows();
+            for (XWPFTableRow row : rows) {
+                CTTrPr trPr = row.getCtRow().addNewTrPr();
+                CTHeight ht = trPr.addNewTrHeight();
+                ht.setVal(BigInteger.valueOf(360));}
+
+            XWPFTableRow row = table.createRow();
             if (i == 0){
+                row.getCell(0).setText(data.get(0).replaceAll("[^A-Za-zА-Яа-я0-9]", " "));
                 row.createCell();
-                row.getCell(0).setText(something.get(0)
-                        .replace('[', ' ')
-                        .replace('"', ' ')
-                        .replace(']' , ' ')
-                        .replace(';', ' ').replaceAll("\\s+",""));
+                row.getCell(1).setText(data.get(1)
+                        .replaceAll("[^A-Za-zА-Яа-я0-9]", " "));
                 row.createCell();
-                row.getCell(1).setText(something.get(1)
-                        .replace('[', ' ')
-                        .replace('"', ' ')
-                        .replace(']' , ' ')
-                        .replace(';', ' ').replaceAll("\\s+",""));
+                row.getCell(2).setText(data.get(2)
+                        .replaceAll("[^A-Za-zА-Яа-я0-9]", " "));
                 row.createCell();
-                row.getCell(2).setText(something.get(2)
-                        .replace('[', ' ')
-                        .replace('"', ' ')
-                        .replace(']' , ' ')
-                        .replace(';', ' ').replaceAll("\\s+",""));
+                row.getCell(3).setText(data.get(3)
+                        .replaceAll("[^A-Za-zА-Яа-я0-9]", " "));
                 row.createCell();
-                row.getCell(3).setText(something.get(3)
-                        .replace('[', ' ')
-                        .replace('"', ' ')
-                        .replace(']' , ' ')
-                        .replace(';', ' ').replaceAll("\\s+",""));
+                row.getCell(4).setText(data.get(4)
+                        .replaceAll("[^A-Za-zА-Яа-я0-9]", " "));
                 row.createCell();
-                row.getCell(4).setText(something.get(4)
-                        .replace('[', ' ')
-                        .replace('"', ' ')
-                        .replace(']' , ' ')
-                        .replace(';', ' ').replaceAll("\\s+",""));
-                row.createCell();
-                row.getCell(5).setText(something.get(5)
-                        .replace('[', ' ')
-                        .replace('"', ' ')
-                        .replace(']' , ' ')
-                        .replace(';', ' ')
-                        .replaceAll("\\s+",""));
+                row.getCell(5).setText(data.get(5)
+                        .replaceAll("[^A-Za-zА-Яа-я0-9]", " "));
 
             }else{
             for (var j = 0; j < 6; ++j) {
                 if (j ==0){
-                    row.getCell(0).setText(something.get(j)
+                    row.getCell(0).setText(data.get(j)
                             .replace('[', ' ')
-                            .replace('"', ' ')
-                            .replace(']' , ' ')
-                            .replace(';', '\n'));
+                            .replace('"', ' '));
                 }else{
                 row.createCell();
-                row.getCell(j).setText(something.get(j)
-                        .replace('[', ' ')
-                        .replace('"', ' ')
-                        .replace(']' , ' ')
-                        .replace(';', '\n'));
+                row.getCell(j).setText(data.get(j)
+                        .replaceAll("[^A-Za-zА-Яа-я0-9]", " "));
                 }
+
             }
             }
         }

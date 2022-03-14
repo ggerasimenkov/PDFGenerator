@@ -25,7 +25,6 @@ public class JsonToPdfController {
         convertService.convertJson2Csv(json);
         Resource file = storageService.loadAsResource();
         convertService.convertCSVtoTable();
-        convertService.convertToDocx();
         convertService.createWordTableFromList();
         return ResponseEntity.ok().header(HttpHeaders.CONTENT_DISPOSITION,
                 "attachment; filename=\"" + file.getFilename() + "\"").body(file);

@@ -8,7 +8,6 @@ public interface ConvertService {
 
     void convertJson2Csv(String json) throws IOException;
     void convertCSVtoTable() throws IOException;
-    void convertToDocx() throws FileNotFoundException;
     void createWordTableFromList() throws IOException;
 
 }

@@ -59,10 +59,7 @@ public class ConvertServiceImpl implements ConvertService {
         System.out.println(table.fullCopy());
     }
 
-    @Override
-    public void convertToDocx() {
 
-    }
     static int CsvStringCounter() {
         int counter =1;
         try{
@@ -175,7 +172,7 @@ public class ConvertServiceImpl implements ConvertService {
         table.removeRow(0);
         document.write(out);
         out.close();
-        log.info(numberOfCsvStrings +" rows DOCX table successfully written");
+        log.info(numberOfCsvStrings - 1 +" rows DOCX table successfully written");
     }
 
 

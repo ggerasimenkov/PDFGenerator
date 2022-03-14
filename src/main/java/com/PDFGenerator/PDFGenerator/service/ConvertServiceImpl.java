@@ -14,14 +14,10 @@ import com.itextpdf.kernel.geom.PageSize;
 import com.itextpdf.kernel.pdf.PdfDocument;
 import com.itextpdf.kernel.pdf.PdfWriter;
 import lombok.extern.java.Log;
-import org.apache.poi.ss.usermodel.Font;
-import org.apache.poi.xwpf.usermodel.*;
+import org.apache.poi.xwpf.usermodel.XWPFDocument;
+import org.apache.poi.xwpf.usermodel.XWPFTable;
+import org.apache.poi.xwpf.usermodel.XWPFTableRow;
 import org.openxmlformats.schemas.wordprocessingml.x2006.main.*;
-import org.openxmlformats.schemas.wordprocessingml.x2006.main.CTHeight;
-import org.openxmlformats.schemas.wordprocessingml.x2006.main.CTString;
-import org.openxmlformats.schemas.wordprocessingml.x2006.main.CTTblPr;
-import org.openxmlformats.schemas.wordprocessingml.x2006.main.CTTrPr;
-import org.openxmlformats.schemas.wordprocessingml.x2006.main.impl.CTPageSzImpl;
 import org.springframework.stereotype.Service;
 import tech.tablesaw.api.Table;
 import tech.tablesaw.io.html.HtmlTableWriter;
@@ -116,7 +112,7 @@ public class ConvertServiceImpl implements ConvertService {
 
         CTPageSz pageSize = section.getPgSz();
         pageSize.setOrient(STPageOrientation.LANDSCAPE);
-//A4 = 595x842 / multiply 20 since BigInteger represents 1/20 Point
+        //A4 = 595x842 / multiply 20 since BigInteger represents 1/20 Point
         pageSize.setW(BigInteger.valueOf(16840));
         pageSize.setH(BigInteger.valueOf(11900));
         CTTblPr tblPr = table.getCTTbl().getTblPr();
@@ -179,7 +175,7 @@ public class ConvertServiceImpl implements ConvertService {
         table.removeRow(0);
         document.write(out);
         out.close();
-        log.info(numberOfCsvStrings +" of rows DOCX table successfully written");
+        log.info(numberOfCsvStrings +" rows DOCX table successfully written");
     }
 
 
